@@ -1,4 +1,3 @@
-// Cache DOM elements
 const modeSelect = document.getElementById('mode-select');
 const singleControls = document.getElementById('single-controls');
 const multiControls = document.getElementById('multi-controls');
@@ -14,29 +13,30 @@ const answerDisplay = document.getElementById('answer-display');
 const followingAyahs = document.getElementById('following-ayahs');
 const ayahCountInput = document.getElementById('ayah-count');
 
-// Add these new elements to the cached DOM elements
 const readingModeBtn = document.getElementById('reading-mode');
 const readingDisplay = document.getElementById('reading-display');
 const readingSurahSelect = document.getElementById('reading-surah-select');
 const surahTitle = document.getElementById('surah-title');
 const surahText = document.getElementById('surah-text');
 
+const bookmarkBtn = document.getElementById('bookmark-btn');
+const bookmarksList = document.getElementById('bookmarks-list');
+
 let quranData = null;
 let currentAyah = null;
 let followingAyahsList = [];
+let bookmarks = JSON.parse(localStorage.getItem('quranBookmarks')) || [];
+let ayahBookmarks = JSON.parse(localStorage.getItem('quranAyahBookmarks')) || [];
 
-// Fetch Quran data
 async function fetchQuranData() {
     try {
-        // Fetch local JSON instead of remote API
         const response = await fetch('quran.json');
         const rawData = await response.json();
-        // Transform the local JSON into an array of surah objects
         quranData = Object.keys(rawData).map(surahNum => {
             const ayahsArray = rawData[surahNum].map((item, index) => {
                 return {
                     text: item.text,
-                    numberInSurah: index + 1, // Generate ayah index
+                    numberInSurah: index + 1,
                     surah: { number: parseInt(surahNum) }
                 };
             });
@@ -47,13 +47,12 @@ async function fetchQuranData() {
                 ayahs: ayahsArray
             };
         });
-        populateSurahSelects(); // Populate dropdowns
+        populateSurahSelects();
     } catch (error) {
         console.error('Error fetching local quran.json:', error);
     }
 }
 
-// Populate surah select dropdowns
 function populateSurahSelects() {
     const surahNames = [
         "Al-Fatihah (الفاتحة)",
@@ -183,11 +182,9 @@ function populateSurahSelects() {
     });
 }
 
-// Replace mode selection event listener with new button handlers
 const singleModeBtn = document.getElementById('single-mode');
 const multipleModeBtn = document.getElementById('multiple-mode');
 
-// Update button handlers with pick-ayah button visibility logic
 singleModeBtn.addEventListener('click', () => {
     singleModeBtn.classList.add('active');
     multipleModeBtn.classList.remove('active');
@@ -195,7 +192,7 @@ singleModeBtn.addEventListener('click', () => {
     singleControls.classList.remove('hidden');
     multiControls.classList.add('hidden');
     readingDisplay.classList.add('hidden');
-    pickAyahButton.classList.remove('hidden'); // Show button
+    pickAyahButton.classList.remove('hidden');
 });
 
 multipleModeBtn.addEventListener('click', () => {
@@ -205,10 +202,9 @@ multipleModeBtn.addEventListener('click', () => {
     singleControls.classList.add('hidden');
     multiControls.classList.remove('hidden');
     readingDisplay.classList.add('hidden');
-    pickAyahButton.classList.remove('hidden'); // Show button
+    pickAyahButton.classList.remove('hidden');
 });
 
-// Add new event listener for reading mode
 readingModeBtn.addEventListener('click', () => {
     readingModeBtn.classList.add('active');
     singleModeBtn.classList.remove('active');
@@ -219,13 +215,11 @@ readingModeBtn.addEventListener('click', () => {
     ayahDisplay.classList.add('hidden');
     answerDisplay.classList.add('hidden');
     readingDisplay.classList.remove('hidden');
-    pickAyahButton.classList.add('hidden'); // Hide button
+    pickAyahButton.classList.add('hidden');
 });
 
-// Pick random ayah
 pickAyahButton.addEventListener('click', () => {
     let selectedAyah;
-    // Check which mode is active by looking at the active class
     const isSingleMode = singleModeBtn.classList.contains('active');
     
     if (isSingleMode) {
@@ -245,16 +239,27 @@ pickAyahButton.addEventListener('click', () => {
     displayAyah(selectedAyah);
 });
 
-// Display selected ayah
 function displayAyah(ayah) {
     currentAyah = ayah;
+    const bookmarkId = `${ayah.surah.number}:${ayah.numberInSurah}`;
+    const isBookmarked = ayahBookmarks.some(b => b.id === bookmarkId);
+    
     ayahNumber.textContent = `${ayah.surah.number}:${ayah.numberInSurah}`;
     ayahText.textContent = ayah.text;
+    
+    const bookmarkHtml = `
+        <button class="ayah-bookmark-btn ${isBookmarked ? 'bookmarked' : ''}" 
+                onclick="toggleCurrentAyahBookmark()">
+            <span class="bookmark-icon">☆</span>
+        </button>
+    `;
+    
     ayahDisplay.classList.remove('hidden');
     answerDisplay.classList.add('hidden');
+    
+    ayahNumber.insertAdjacentHTML('afterend', bookmarkHtml);
 }
 
-// Check answer
 checkAnswerButton.addEventListener('click', () => {
     const ayahCount = parseInt(ayahCountInput.value) || 3;
     const surah = quranData[currentAyah.surah.number - 1];
@@ -271,23 +276,157 @@ checkAnswerButton.addEventListener('click', () => {
     answerDisplay.classList.remove('hidden');
 });
 
-// Add new function to display full surah
 function displayFullSurah(surahNumber) {
     const surah = quranData[surahNumber - 1];
-    surahTitle.textContent = `سورة ${surah.name}`;
-    
-    surahText.innerHTML = surah.ayahs.map((ayah, index) => `
-        <div class="ayah-container">
-            <span class="ayah-number">${index + 1}.</span>
-            <span class="ayah-text">${ayah.text}</span>
-        </div>
-    `).join('');
+    const isBookmarked = bookmarks.some(b => b.surah === surahNumber);
+    surahTitle.innerHTML = `
+        سورة ${surah.name}
+        <button class="surah-bookmark-btn ${isBookmarked ? 'bookmarked' : ''}"
+                onclick="toggleBookmark(${surahNumber})">
+            <span class="bookmark-icon">☆</span>
+        </button>
+    `;
+    surahText.innerHTML = surah.ayahs.map((ayah, index) => {
+        const ayahBookmarkId = `${surahNumber}:${index+1}`;
+        const isAyahBookmarked = ayahBookmarks.some(b => b.id === ayahBookmarkId);
+        return `
+            <div class="ayah-container">
+                <span class="ayah-number">${index + 1}.</span>
+                <span class="ayah-text">${ayah.text}</span>
+                <button class="ayah-bookmark-btn ${isAyahBookmarked ? 'bookmarked' : ''}"
+                        onclick="toggleAyahBookmark(${surahNumber}, ${index + 1})">
+                    <span class="bookmark-icon">☆</span>
+                </button>
+            </div>
+        `;
+    }).join('');
 }
 
-// Add event listener for reading surah select
 readingSurahSelect.addEventListener('change', (e) => {
     displayFullSurah(parseInt(e.target.value));
 });
 
-// Initialize
+function toggleBookmark() {
+    const currentSurah = parseInt(readingSurahSelect.value);
+    const bookmarkData = {
+        surah: currentSurah,
+        timestamp: new Date().toLocaleString()
+    };
+
+    const existingIndex = bookmarks.findIndex(b => b.surah === currentSurah);
+    
+    if (existingIndex >= 0) {
+        bookmarks.splice(existingIndex, 1);
+        bookmarkBtn.classList.remove('bookmarked');
+    } else {
+        bookmarks.push(bookmarkData);
+        bookmarkBtn.classList.add('bookmarked');
+    }
+
+    localStorage.setItem('quranBookmarks', JSON.stringify(bookmarks));
+    updateBookmarksList();
+}
+
+function toggleAyahBookmark(surah, ayahNum) {
+    const bookmarkId = `${surah}:${ayahNum}`;
+    const bookmarkData = {
+        id: bookmarkId,
+        surah: surah,
+        ayah: ayahNum,
+        timestamp: new Date().toLocaleString()
+    };
+
+    const existingIndex = ayahBookmarks.findIndex(b => b.id === bookmarkId);
+    
+    if (existingIndex >= 0) {
+        ayahBookmarks.splice(existingIndex, 1);
+    } else {
+        ayahBookmarks.push(bookmarkData);
+    }
+
+    localStorage.setItem('quranAyahBookmarks', JSON.stringify(ayahBookmarks));
+    updateBookmarksList();
+}
+
+function toggleCurrentAyahBookmark() {
+    if (!currentAyah) return;
+    
+    const isNowBookmarked = toggleAyahBookmark(currentAyah.surah.number, currentAyah.numberInSurah);
+    const bookmarkBtn = document.querySelector('.ayah-bookmark-btn');
+    
+    bookmarkBtn.classList.toggle('bookmarked', isNowBookmarked);
+    localStorage.setItem('quranAyahBookmarks', JSON.stringify(ayahBookmarks));
+    updateBookmarksList();
+}
+
+function updateBookmarksList() {
+    const surahBookmarksHtml = bookmarks
+        .map(bookmark => `
+            <div class="bookmark-item surah-bookmark">
+                <span onclick="goToBookmark(${bookmark.surah})">
+                    Surah ${bookmark.surah}
+                </span>
+                <span class="bookmark-date">${bookmark.timestamp}</span>
+                <button onclick="removeBookmark(${bookmark.surah})" class="remove-bookmark">×</button>
+            </div>
+        `).join('');
+
+    const ayahBookmarksHtml = ayahBookmarks
+        .map(bookmark => `
+            <div class="bookmark-item ayah-bookmark">
+                <span onclick="goToAyahBookmark('${bookmark.id}')">
+                    ${bookmark.id}
+                </span>
+                <span class="bookmark-date">${bookmark.timestamp}</span>
+                <button onclick="removeAyahBookmark('${bookmark.id}')" class="remove-bookmark">×</button>
+            </div>
+        `).join('');
+
+    bookmarksList.innerHTML = `
+        <h4>Surah Bookmarks</h4>
+        ${surahBookmarksHtml}
+        <h4>Ayah Bookmarks</h4>
+        ${ayahBookmarksHtml}
+    `;
+}
+
+function goToAyahBookmark(bookmarkId) {
+    const [surahNum, ayahNum] = bookmarkId.split(':').map(Number);
+    const surah = quranData[surahNum - 1];
+    const ayah = surah.ayahs[ayahNum - 1];
+    displayAyah(ayah);
+}
+
+function removeAyahBookmark(bookmarkId) {
+    ayahBookmarks = ayahBookmarks.filter(b => b.id !== bookmarkId);
+    localStorage.setItem('quranAyahBookmarks', JSON.stringify(ayahBookmarks));
+    updateBookmarksList();
+    
+    if (currentAyah && `${currentAyah.surah.number}:${currentAyah.numberInSurah}` === bookmarkId) {
+        const bookmarkBtn = document.querySelector('.ayah-bookmark-btn');
+        if (bookmarkBtn) bookmarkBtn.classList.remove('bookmarked');
+    }
+}
+
+function goToBookmark(surahNumber) {
+    readingSurahSelect.value = surahNumber;
+    displayFullSurah(surahNumber);
+}
+
+function removeBookmark(surahNumber) {
+    bookmarks = bookmarks.filter(b => b.surah !== surahNumber);
+    localStorage.setItem('quranBookmarks', JSON.stringify(bookmarks));
+    updateBookmarksList();
+    if (parseInt(readingSurahSelect.value) === surahNumber) {
+        bookmarkBtn.classList.remove('bookmarked');
+    }
+}
+
+bookmarkBtn.removeEventListener('click', toggleBookmark);
+bookmarkBtn.addEventListener('click', () => {
+    bookmarksList.parentElement.classList.toggle('hidden');
+});
+
+document.addEventListener('DOMContentLoaded', updateBookmarksList());
+
 fetchQuranData();
