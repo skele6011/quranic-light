@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qur'an Memorization Test</title>
+    <link rel="stylesheet" href="quranic-light-style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2c3e50">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+</head>
+<body>
+    
+   
+    </a>
+    <div class="container">
+        <header>
+            <h1>Quranic Light</h1>
+        </header>
+        <main>
+            <div class="card controls">
+                <div class="mode-selector">
+                    <button id="single-mode" class="mode-btn active">Single Surah</button>
+                    <button id="multiple-mode" class="mode-btn">Advanced Mode</button>
+                    <button id="reading-mode" class="mode-btn">Read Qur'an</button>
+                </div>
+
+                <div id="multi-controls" class="hidden control-group">
+                    <div class="input-group">
+                        <label for="ayah-count">Number of Ayahs:</label>
+                        <input type="number" id="ayah-count" min="2" max="10" value="3" class="input-styled">
+                    </div>
+                    <div class="surah-range">
+                        <div class="input-group">
+                            <label for="surah-select-start">From Surah:</label>
+                            <select id="surah-select-start" class="select-styled"></select>
+                        </div>
+                        <div class="input-group">
+                            <label for="surah-select-end">To Surah:</label>
+                            <select id="surah-select-end" class="select-styled"></select>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="single-controls" class="control-group">
+                    <div class="input-group">
+                        <label for="surah-select">Select Surah:</label>
+                        <select id="surah-select" class="select-styled"></select>
+                    </div>
+                </div>
+
+                <button id="pick-ayah" class="btn-primary">Pick Ayah</button>
+            </div>
+
+            <div id="ayah-display" class="card hidden">
+                <h2>Selected Ayah</h2>
+                <p class="ayah-content">
+                    <span id="ayah-number" class="ayah-number"> <br> </span> 
+                    <span id="ayah-text" class="arabic-text"> <br> </span> 
+                </p>
+                <button id="check-answer" class="btn-primary">Check Answer</button>
+            </div>
+
+            <div id="answer-display" class="card hidden">
+                <h2>Following Ayahs</h2>
+                <ol id="following-ayahs" class="arabic-text"></ol>
+            </div>
+
+            <div id="reading-display" class="card hidden">
+                <div class="reading-controls">
+                    <select id="reading-surah-select" class="select-styled"></select>
+                </div>
+                <div class="surah-content">
+                    <h2 id="surah-title" class="arabic-text"></h2>
+                    <div id="surah-text" class="arabic-text"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="quranic-light-script.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful');
+                    })
+                    .catch(err => {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>
