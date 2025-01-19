@@ -649,4 +649,98 @@ button:hover {
     }
 }
 
+/* Add these new styles */
+
+.history-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    margin: 0.5rem 0;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.history-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.history-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.history-timestamp {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.clear-history-btn {
+    background-color: #ff4444;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.clear-history-btn:hover {
+    background-color: #cc0000;
+}
+
+/* ...existing code... */
+
+#memorization-history-display {
+    display: none;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+#memorization-history-display:not(.hidden) {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
 /* ...rest of existing code... */
+
+/* ...existing code... */
+.mark-answer {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 1rem;
+}
+
+.mark-answer .btn-primary {
+    width: 45%;
+}
+/* ...existing code... */
+
+.clear-history-btn {
+    background-color: #ff4444;
+    color: #fff;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    cursor: pointer;
+    margin: 1rem 0; 
+    transition: background-color 0.3s ease;
+}
+.clear-history-btn:hover {
+    background-color: #cc0000;
+}
+/* ...existing code... */
+.correct-answer {
+    color: green;
+}
+.incorrect-answer {
+    color: red;
+}
+/* ...existing code... */

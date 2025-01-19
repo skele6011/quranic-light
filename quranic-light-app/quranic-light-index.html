@@ -26,6 +26,8 @@
                     <button id="single-mode" class="mode-btn active">Single Surah</button>
                     <button id="multiple-mode" class="mode-btn">Advanced Mode</button>
                     <button id="reading-mode" class="mode-btn">Read Qur'an</button>
+                    <button id="history-mode" class="mode-btn">History</button>
+                    <button id="memorization-history-btn" class="mode-btn">Memorization Test History</button>
                 </div>
 
                 <div id="multi-controls" class="hidden control-group">
@@ -84,6 +86,17 @@
                     <h2 id="surah-title" class="arabic-text"></h2>
                     <div id="surah-text" class="arabic-text"></div>
                 </div>
+            </div>
+
+            <div id="history-display" class="card hidden">
+                <h2>Reading History</h2>
+                <div id="history-list"></div>
+            </div>
+
+            <div id="memorization-history-display" class="card hidden">
+                <h2>Memorization Test History</h2>
+                <button id="clear-memorization-history" class="clear-history-btn">Clear Memorization History</button>
+                <div id="memorization-history-list"></div>
             </div>
         </main>
     </div>

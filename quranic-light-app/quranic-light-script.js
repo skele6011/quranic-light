@@ -22,11 +22,20 @@ const surahText = document.getElementById('surah-text');
 const bookmarkBtn = document.getElementById('bookmark-btn');
 const bookmarksList = document.getElementById('bookmarks-list');
 
+const historyModeBtn = document.getElementById('history-mode');
+const historyDisplay = document.getElementById('history-display');
+const historyList = document.getElementById('history-list');
+
+const memorizationHistoryBtn = document.getElementById('memorization-history-btn');
+const memorizationHistoryDisplay = document.getElementById('memorization-history-display');
+const memorizationHistoryList = document.getElementById('memorization-history-list');
+
 let quranData = null;
 let currentAyah = null;
 let followingAyahsList = [];
 let bookmarks = JSON.parse(localStorage.getItem('quranBookmarks')) || [];
 let ayahBookmarks = JSON.parse(localStorage.getItem('quranAyahBookmarks')) || [];
+let readingHistory = JSON.parse(localStorage.getItem('quranReadingHistory')) || [];
 
 async function fetchQuranData() {
     try {
@@ -186,36 +195,113 @@ const singleModeBtn = document.getElementById('single-mode');
 const multipleModeBtn = document.getElementById('multiple-mode');
 
 singleModeBtn.addEventListener('click', () => {
-    singleModeBtn.classList.add('active');
-    multipleModeBtn.classList.remove('active');
-    readingModeBtn.classList.remove('active');
-    singleControls.classList.remove('hidden');
-    multiControls.classList.add('hidden');
-    readingDisplay.classList.add('hidden');
-    pickAyahButton.classList.remove('hidden');
+    const isActive = singleModeBtn.classList.contains('active');
+    if (isActive) {
+        singleModeBtn.classList.remove('active');
+        singleControls.classList.add('hidden');
+        pickAyahButton.classList.add('hidden');
+    } else {
+        singleModeBtn.classList.add('active');
+        multipleModeBtn.classList.remove('active');
+        readingModeBtn.classList.remove('active');
+        historyModeBtn.classList.remove('active');
+        memorizationHistoryBtn.classList.remove('active');
+        singleControls.classList.remove('hidden');
+        multiControls.classList.add('hidden');
+        readingDisplay.classList.add('hidden');
+        historyDisplay.classList.add('hidden');
+        memorizationHistoryDisplay.classList.add('hidden');
+        pickAyahButton.classList.remove('hidden');
+    }
 });
 
 multipleModeBtn.addEventListener('click', () => {
-    multipleModeBtn.classList.add('active');
-    singleModeBtn.classList.remove('active');
-    readingModeBtn.classList.remove('active');
-    singleControls.classList.add('hidden');
-    multiControls.classList.remove('hidden');
-    readingDisplay.classList.add('hidden');
-    pickAyahButton.classList.remove('hidden');
+    const isActive = multipleModeBtn.classList.contains('active');
+    if (isActive) {
+        multipleModeBtn.classList.remove('active');
+        multiControls.classList.add('hidden');
+        pickAyahButton.classList.add('hidden');
+    } else {
+        multipleModeBtn.classList.add('active');
+        singleModeBtn.classList.remove('active');
+        readingModeBtn.classList.remove('active');
+        historyModeBtn.classList.remove('active');
+        memorizationHistoryBtn.classList.remove('active');
+        singleControls.classList.add('hidden');
+        multiControls.classList.remove('hidden');
+        readingDisplay.classList.add('hidden');
+        historyDisplay.classList.add('hidden');
+        memorizationHistoryDisplay.classList.add('hidden');
+        pickAyahButton.classList.remove('hidden');
+    }
 });
 
 readingModeBtn.addEventListener('click', () => {
-    readingModeBtn.classList.add('active');
-    singleModeBtn.classList.remove('active');
-    multipleModeBtn.classList.remove('active');
-    
-    singleControls.classList.add('hidden');
-    multiControls.classList.add('hidden');
-    ayahDisplay.classList.add('hidden');
-    answerDisplay.classList.add('hidden');
-    readingDisplay.classList.remove('hidden');
-    pickAyahButton.classList.add('hidden');
+    const isActive = readingModeBtn.classList.contains('active');
+    if (isActive) {
+        readingModeBtn.classList.remove('active');
+        readingDisplay.classList.add('hidden');
+    } else {
+        readingModeBtn.classList.add('active');
+        singleModeBtn.classList.remove('active');
+        multipleModeBtn.classList.remove('active');
+        historyModeBtn.classList.remove('active');
+        memorizationHistoryBtn.classList.remove('active');
+        singleControls.classList.add('hidden');
+        multiControls.classList.add('hidden');
+        ayahDisplay.classList.add('hidden');
+        answerDisplay.classList.add('hidden');
+        readingDisplay.classList.remove('hidden');
+        historyDisplay.classList.add('hidden');
+        memorizationHistoryDisplay.classList.add('hidden');
+        pickAyahButton.classList.add('hidden');
+    }
+});
+
+historyModeBtn.addEventListener('click', () => {
+    const isActive = historyModeBtn.classList.contains('active');
+    if (isActive) {
+        historyModeBtn.classList.remove('active');
+        historyDisplay.classList.add('hidden');
+    } else {
+        historyModeBtn.classList.add('active');
+        singleModeBtn.classList.remove('active');
+        multipleModeBtn.classList.remove('active');
+        readingModeBtn.classList.remove('active');
+        memorizationHistoryBtn.classList.remove('active');
+        singleControls.classList.add('hidden');
+        multiControls.classList.add('hidden');
+        ayahDisplay.classList.add('hidden');
+        answerDisplay.classList.add('hidden');
+        readingDisplay.classList.add('hidden');
+        historyDisplay.classList.remove('hidden');
+        memorizationHistoryDisplay.classList.add('hidden');
+        pickAyahButton.classList.add('hidden');
+        updateHistoryList();
+    }
+});
+
+memorizationHistoryBtn.addEventListener('click', () => {
+    const isActive = memorizationHistoryBtn.classList.contains('active');
+    if (isActive) {
+        memorizationHistoryBtn.classList.remove('active');
+        memorizationHistoryDisplay.classList.add('hidden');
+    } else {
+        memorizationHistoryBtn.classList.add('active');
+        singleModeBtn.classList.remove('active');
+        multipleModeBtn.classList.remove('active');
+        readingModeBtn.classList.remove('active');
+        historyModeBtn.classList.remove('active');
+        singleControls.classList.add('hidden');
+        multiControls.classList.add('hidden');
+        ayahDisplay.classList.add('hidden');
+        answerDisplay.classList.add('hidden');
+        readingDisplay.classList.add('hidden');
+        historyDisplay.classList.add('hidden');
+        memorizationHistoryDisplay.classList.remove('hidden');
+        pickAyahButton.classList.add('hidden');
+        updateMemorizationHistoryList();
+    }
 });
 
 pickAyahButton.addEventListener('click', () => {
@@ -258,6 +344,10 @@ function displayAyah(ayah) {
     answerDisplay.classList.add('hidden');
     
     ayahNumber.insertAdjacentHTML('afterend', bookmarkHtml);
+    addToHistory('ayah', {
+        surah: ayah.surah.number,
+        ayah: ayah.numberInSurah
+    });
 }
 
 checkAnswerButton.addEventListener('click', () => {
@@ -274,7 +364,34 @@ checkAnswerButton.addEventListener('click', () => {
         .join('');
 
     answerDisplay.classList.remove('hidden');
+    addToHistory('test', {
+        surah: currentAyah.surah.number,
+        ayah: currentAyah.numberInSurah,
+        correct: null
+    });
+
+    // Remove existing mark-answer block if it exists
+    const existingMarkAnswer = answerDisplay.querySelector('.mark-answer');
+    if (existingMarkAnswer) existingMarkAnswer.remove();
+
+    const markAnswerHtml = `
+        <div class="mark-answer">
+            <button onclick="markAnswer(true)" class="btn-primary">Correct</button>
+            <button onclick="markAnswer(false)" class="btn-primary">Incorrect</button>
+        </div>
+    `;
+    answerDisplay.insertAdjacentHTML('beforeend', markAnswerHtml);
 });
+
+function markAnswer(correct) {
+    const lastHistoryItem = readingHistory.find(item => item.type === 'test' && item.details.correct === null);
+    if (lastHistoryItem) {
+        lastHistoryItem.details.correct = correct;
+        localStorage.setItem('quranReadingHistory', JSON.stringify(readingHistory));
+        updateHistoryList();
+    }
+    pickAyahButton.click();
+}
 
 function displayFullSurah(surahNumber) {
     const surah = quranData[surahNumber - 1];
@@ -300,6 +417,9 @@ function displayFullSurah(surahNumber) {
             </div>
         `;
     }).join('');
+    addToHistory('surah', {
+        surah: surahNumber
+    });
 }
 
 readingSurahSelect.addEventListener('change', (e) => {
@@ -361,15 +481,18 @@ function toggleCurrentAyahBookmark() {
 
 function updateBookmarksList() {
     const surahBookmarksHtml = bookmarks
-        .map(bookmark => `
-            <div class="bookmark-item surah-bookmark">
-                <span onclick="goToBookmark(${bookmark.surah})">
-                    Surah ${bookmark.surah}
-                </span>
-                <span class="bookmark-date">${bookmark.timestamp}</span>
-                <button onclick="removeBookmark(${bookmark.surah})" class="remove-bookmark">×</button>
-            </div>
-        `).join('');
+        .map(bookmark => {
+            const surahName = quranData[bookmark.surah - 1].name;
+            return `
+                <div class="bookmark-item surah-bookmark">
+                    <span onclick="goToBookmark(${bookmark.surah})">
+                        ${surahName}
+                    </span>
+                    <span class="bookmark-date">${bookmark.timestamp}</span>
+                    <button onclick="removeBookmark(${bookmark.surah})" class="remove-bookmark">×</button>
+                </div>
+            `;
+        }).join('');
 
     const ayahBookmarksHtml = ayahBookmarks
         .map(bookmark => `
@@ -422,11 +545,124 @@ function removeBookmark(surahNumber) {
     }
 }
 
+function addToHistory(type, details) {
+    const historyItem = {
+        type,
+        details,
+        timestamp: new Date().toISOString()
+    };
+    
+    readingHistory.unshift(historyItem); // Add to start of array
+    if (readingHistory.length > 100) { // Keep only last 100 items
+        readingHistory.pop();
+    }
+    
+    localStorage.setItem('quranReadingHistory', JSON.stringify(readingHistory));
+    updateHistoryList();
+}
+
+function updateHistoryList() {
+    if (!historyDisplay.classList.contains('hidden')) {
+        const clearBtn = `
+            <button class="clear-history-btn" onclick="clearHistory()">
+                Clear History
+            </button>
+        `;
+        
+        const historyHtml = readingHistory.map(item => {
+            const date = new Date(item.timestamp).toLocaleString();
+            const surahName = quranData[item.details.surah - 1].name;
+            let content = '';
+            
+            switch(item.type) {
+                case 'ayah':
+                    content = `Read Ayah ${item.details.surah}:${item.details.ayah}`;
+                    break;
+                case 'surah':
+                    content = `Read Surah ${item.details.surah}`;
+                    break;
+                case 'test':
+                    content = `Practiced Ayah ${item.details.surah}:${item.details.ayah} - ${item.details.correct === null ? 'Pending' : item.details.correct ? 'Correct' : 'Incorrect'}`;
+                    break;
+            }
+            
+            return `
+                <div class="history-item" onclick="goToHistoryItem('${item.type}', ${JSON.stringify(item.details).replace(/"/g, '&quot;')})">
+                    <div class="history-details">
+                        <span>${surahName}</span>
+                        <span>${content}</span>
+                        <span class="history-timestamp">${date}</span>
+                    </div>
+                </div>
+            `;
+        }).join('');
+        
+        historyList.innerHTML = clearBtn + historyHtml;
+    }
+}
+
+function clearMemorizationHistory() {
+    readingHistory = readingHistory.filter(item => item.type !== 'test');
+    localStorage.setItem('quranReadingHistory', JSON.stringify(readingHistory));
+    updateMemorizationHistoryList();
+}
+
+function updateMemorizationHistoryList() {
+    const historyHtml = readingHistory.filter(item => item.type === 'test').map(item => {
+        const date = new Date(item.timestamp).toLocaleString();
+        const colorClass = item.details.correct ? 'correct-answer' : 'incorrect-answer';
+        const surahName = quranData[item.details.surah - 1].name;
+        const content = `Practiced Ayah ${item.details.surah}:${item.details.ayah} - ${item.details.correct === null ? 'Pending' : item.details.correct ? 'Correct' : 'Incorrect'}`;
+        
+        return `
+            <div class="history-item ${colorClass}">
+                <div class="history-details">
+                    <span>${surahName}</span>
+                    <span>${content}</span>
+                    <span class="history-timestamp">${date}</span>
+                </div>
+            </div>
+        `;
+    }).join('');
+    
+    memorizationHistoryList.innerHTML = historyHtml;
+}
+
+function goToHistoryItem(type, details) {
+    switch(type) {
+        case 'ayah':
+            const ayah = quranData[details.surah - 1].ayahs[details.ayah - 1];
+            displayAyah(ayah);
+            break;
+        case 'surah':
+            readingSurahSelect.value = details.surah;
+            displayFullSurah(details.surah);
+            break;
+        case 'test':
+            const testAyah = quranData[details.surah - 1].ayahs[details.ayah - 1];
+            displayAyah(testAyah);
+            break;
+    }
+}
+
+function clearHistory() {
+    readingHistory = [];
+    localStorage.setItem('quranReadingHistory', JSON.stringify(readingHistory));
+    updateHistoryList();
+}
+
 bookmarkBtn.removeEventListener('click', toggleBookmark);
 bookmarkBtn.addEventListener('click', () => {
     bookmarksList.parentElement.classList.toggle('hidden');
 });
 
-document.addEventListener('DOMContentLoaded', updateBookmarksList());
+document.addEventListener('DOMContentLoaded', () => {
+    updateBookmarksList();
+    updateHistoryList();
+    const clearMemBtn = document.getElementById('clear-memorization-history');
+    if (clearMemBtn) {
+        clearMemBtn.addEventListener('click', clearMemorizationHistory);
+    }
+});
 
 fetchQuranData();
