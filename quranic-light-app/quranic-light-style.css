@@ -95,7 +95,7 @@ h1 {
     border-radius: var(--border-radius);
     font-size: 1rem;
     color: var(--text-color);
-    background-color: #000000; /* Changed from rgba(0, 0, 0, 0.3) to pure black */
+    background-color: #000000; 
     appearance: none;
     background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
     background-repeat: no-repeat;
@@ -371,7 +371,7 @@ button:hover {
     color: white;
 }
 
-/* Add these new styles */
+
 .surah-content {
     max-height: 70vh;
     overflow-y: auto;
@@ -403,7 +403,6 @@ button:hover {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Add these new styles */
 .bookmark-btn {
     background: transparent;
     border: none;
@@ -422,9 +421,7 @@ button:hover {
     color: var(--accent-color);
 }
 
-/* Add these styles at the appropriate place */
 .bookmarks-panel {
-    /* display: none; Make bookmarks panel hidden by default */
     margin-top: 1rem;
     padding: 1rem;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -470,7 +467,6 @@ button:hover {
     margin-bottom: 1rem;
 }
 
-/* ...existing code... */
 
 .ayah-bookmark-btn {
     background: transparent;
@@ -495,7 +491,6 @@ button:hover {
     background: rgba(52, 152, 219, 0.1);
 }
 
-/* ...existing code... */
 
 .surah-bookmark-btn {
     background: transparent;
@@ -513,10 +508,9 @@ button:hover {
 }
 
 .surah-bookmark-btn.bookmarked .bookmark-icon {
-    color: var(--accent-color);
+    color: var (--accent-color);
 }
 
-/* Mobile optimizations */
 @media screen and (max-width: 768px) {
     .container {
         width: 100%;
@@ -541,7 +535,7 @@ button:hover {
     }
 
     .select-styled, .input-styled {
-        font-size: 16px; /* Prevents iOS zoom on focus */
+        font-size: 16px; 
         padding: 0.8rem;
         width: 100%;
     }
@@ -574,7 +568,6 @@ button:hover {
         max-height: 60vh;
     }
 
-    /* Improve touch targets */
     button, 
     .bookmark-btn,
     .ayah-bookmark-btn,
@@ -584,17 +577,14 @@ button:hover {
         padding: 0.8rem;
     }
 
-    /* Prevent text overflow */
     .ayah-container {
         word-break: break-word;
     }
 
-    /* Better scrolling on mobile */
     .surah-content::-webkit-scrollbar {
         width: 4px;
     }
 
-    /* Improved spacing for mobile */
     .card {
         padding: 1rem;
         margin-bottom: 1rem;
@@ -610,7 +600,6 @@ button:hover {
     }
 }
 
-/* Additional tweaks for very small screens */
 @media screen and (max-width: 320px) {
     .arabic-text {
         font-size: 1rem;
@@ -625,7 +614,6 @@ button:hover {
     }
 }
 
-/* Prevent content shift when switching modes */
 .mode-btn, 
 .control-group,
 #ayah-display,
@@ -634,12 +622,10 @@ button:hover {
     transition: all 0.3s ease;
 }
 
-/* Fix for iOS momentum scrolling */
 .surah-content {
     -webkit-overflow-scrolling: touch;
 }
 
-/* Improve tap highlights on mobile */
 @media (hover: none) {
     .btn-primary:active,
     .mode-btn:active,
@@ -649,7 +635,6 @@ button:hover {
     }
 }
 
-/* Add these new styles */
 
 .history-item {
     display: flex;
@@ -693,7 +678,6 @@ button:hover {
     background-color: #cc0000;
 }
 
-/* ...existing code... */
 
 #memorization-history-display {
     display: none;
@@ -708,9 +692,10 @@ button:hover {
     transform: translateY(0);
 }
 
-/* ...rest of existing code... */
+.pending-answer {
+    color: yellow;
+}
 
-/* ...existing code... */
 .mark-answer {
     display: flex;
     justify-content: space-around;
@@ -720,7 +705,6 @@ button:hover {
 .mark-answer .btn-primary {
     width: 45%;
 }
-/* ...existing code... */
 
 .clear-history-btn {
     background-color: #ff4444;
@@ -736,11 +720,9 @@ button:hover {
 .clear-history-btn:hover {
     background-color: #cc0000;
 }
-/* ...existing code... */
 .correct-answer {
     color: green;
 }
 .incorrect-answer {
     color: red;
 }
-/* ...existing code... */

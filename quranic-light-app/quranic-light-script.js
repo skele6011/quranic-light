@@ -370,7 +370,6 @@ checkAnswerButton.addEventListener('click', () => {
         correct: null
     });
 
-    // Remove existing mark-answer block if it exists
     const existingMarkAnswer = answerDisplay.querySelector('.mark-answer');
     if (existingMarkAnswer) existingMarkAnswer.remove();
 
@@ -552,8 +551,8 @@ function addToHistory(type, details) {
         timestamp: new Date().toISOString()
     };
     
-    readingHistory.unshift(historyItem); // Add to start of array
-    if (readingHistory.length > 100) { // Keep only last 100 items
+    readingHistory.unshift(historyItem); 
+    if (readingHistory.length > 100) { 
         readingHistory.pop();
     }
     
@@ -610,7 +609,12 @@ function clearMemorizationHistory() {
 function updateMemorizationHistoryList() {
     const historyHtml = readingHistory.filter(item => item.type === 'test').map(item => {
         const date = new Date(item.timestamp).toLocaleString();
-        const colorClass = item.details.correct ? 'correct-answer' : 'incorrect-answer';
+        let colorClass = '';
+        if (item.details.correct === null) {
+            colorClass = 'pending-answer';
+        } else {
+            colorClass = item.details.correct ? 'correct-answer' : 'incorrect-answer';
+        }
         const surahName = quranData[item.details.surah - 1].name;
         const content = `Practiced Ayah ${item.details.surah}:${item.details.ayah} - ${item.details.correct === null ? 'Pending' : item.details.correct ? 'Correct' : 'Incorrect'}`;
         
