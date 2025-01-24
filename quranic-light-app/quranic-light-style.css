@@ -711,7 +711,7 @@ button:hover {
     color: #fff;
     border: none;
     padding: 0.75rem 1.5rem;
-    border-radius: var(--border-radius);
+    border-radius: var (--border-radius);
     font-size: 1rem;
     cursor: pointer;
     margin: 1rem 0; 
@@ -727,7 +727,7 @@ button:hover {
     color: red;
 }
 
-/* ...existing code... */
+
 .remove-history {
     background: transparent;
     border: none;
@@ -738,4 +738,46 @@ button:hover {
 .remove-history:hover {
     color: #ff4444;
 }
-/* ...existing code... */
+
+.pencil-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 50px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+.pencil-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.editor-btn {
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    margin: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.editor-btn.active {
+    background-color: transparent;
+    color: var(--accent-color);
+}
+
+.editor-btn:hover {
+    background-color: #2980b9;
+    cursor: pointer;
+}
+
+.editor-mode .mode-btn {
+    display: none;
+}
+

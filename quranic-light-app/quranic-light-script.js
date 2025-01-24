@@ -686,6 +686,45 @@ document.addEventListener('DOMContentLoaded', () => {
     if (clearMemBtn) {
         clearMemBtn.addEventListener('click', clearMemorizationHistory);
     }
+    const pencilButton = document.getElementById('pencil-button');
+    const editorControls = document.getElementById('editor-controls');
+    const singleSurahButton = document.getElementById('single-mode');
+    const advancedModeButton = document.getElementById('multiple-mode');
+    const readQuranButton = document.getElementById('reading-mode');
+    const historyButton = document.getElementById('history-mode');
+    const memorizationHistoryButton = document.getElementById('memorization-history-btn');
+    let isEditorMode = false;
+
+    pencilButton.addEventListener('click', () => {
+        isEditorMode = !isEditorMode;
+        document.body.classList.toggle('editor-mode', isEditorMode);
+        editorControls.classList.toggle('hidden', !isEditorMode);
+    });
+
+    document.getElementById('toggle-single-surah').addEventListener('click', (e) => {
+        singleSurahButton.classList.toggle('hidden');
+        e.target.classList.toggle('active');
+    });
+
+    document.getElementById('toggle-advanced-mode').addEventListener('click', (e) => {
+        advancedModeButton.classList.toggle('hidden');
+        e.target.classList.toggle('active');
+    });
+
+    document.getElementById('toggle-read-quran').addEventListener('click', (e) => {
+        readQuranButton.classList.toggle('hidden');
+        e.target.classList.toggle('active');
+    });
+
+    document.getElementById('toggle-history').addEventListener('click', (e) => {
+        historyButton.classList.toggle('hidden');
+        e.target.classList.toggle('active');
+    });
+
+    document.getElementById('toggle-memorization-history').addEventListener('click', (e) => {
+        memorizationHistoryButton.classList.toggle('hidden');
+        e.target.classList.toggle('active');
+    });
 });
 
 fetchQuranData();
