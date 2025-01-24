@@ -1,6 +1,16 @@
 # Quranic Light
 [Click here](https://skele6011.github.io/quranic-light/) to access app.
 
+## Updates:
+#### Latest Updates
+- Added ability to delete individual history entries using 'x' button (on screen, not keyboard)
+- Added developer mode toggle for showing/hiding buttons
+#### Earlier updates
+- Added incorrect/correct buttons for memorization tests. Added reading history. Added memorization history with incorrect/correct indicator.
+- Added reading section with bookmarks for ayahs and surahs
+- Made a logo & Made it a downloadable app
+- Added Surah names
+- Made multiple surah mode
 ## What is Quranic Light?
 This is a web application that was made using html, css, and js. It's main focus is to help hifdh students by allowing them to be tested on random ayat from the picked surah (or a range of them).
 It's completely free and open source, always willing to take suggestions @ my discord (skele6011). Honestly, I can't be bothered to make it's own email for questions, suggestions, etc. This is mainly because this is a very small application, there's barely anyone using it. 
