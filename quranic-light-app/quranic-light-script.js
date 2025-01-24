@@ -560,6 +560,13 @@ function addToHistory(type, details) {
     updateHistoryList();
 }
 
+function removeHistoryItem(event, index) {
+    event.stopPropagation();
+    readingHistory.splice(index, 1);
+    localStorage.setItem('quranReadingHistory', JSON.stringify(readingHistory));
+    updateHistoryList();
+}
+
 function updateHistoryList() {
     if (!historyDisplay.classList.contains('hidden')) {
         const clearBtn = `
@@ -568,7 +575,7 @@ function updateHistoryList() {
             </button>
         `;
         
-        const historyHtml = readingHistory.map(item => {
+        const historyHtml = readingHistory.map((item, index) => {
             const date = new Date(item.timestamp).toLocaleString();
             const surahName = quranData[item.details.surah - 1].name;
             let content = '';
@@ -592,6 +599,7 @@ function updateHistoryList() {
                         <span>${content}</span>
                         <span class="history-timestamp">${date}</span>
                     </div>
+                    <button class="remove-history" onclick="removeHistoryItem(event, ${index})">x</button>
                 </div>
             `;
         }).join('');
@@ -606,8 +614,18 @@ function clearMemorizationHistory() {
     updateMemorizationHistoryList();
 }
 
+function removeMemorizationHistoryItem(event, index) {
+    event.stopPropagation();
+    const memorizationHistory = readingHistory.filter(item => item.type === 'test');
+    const itemToRemove = memorizationHistory[index];
+    const itemIndex = readingHistory.indexOf(itemToRemove);
+    readingHistory.splice(itemIndex, 1);
+    localStorage.setItem('quranReadingHistory', JSON.stringify(readingHistory));
+    updateMemorizationHistoryList();
+}
+
 function updateMemorizationHistoryList() {
-    const historyHtml = readingHistory.filter(item => item.type === 'test').map(item => {
+    const historyHtml = readingHistory.filter(item => item.type === 'test').map((item, index) => {
         const date = new Date(item.timestamp).toLocaleString();
         let colorClass = '';
         if (item.details.correct === null) {
@@ -625,6 +643,7 @@ function updateMemorizationHistoryList() {
                     <span>${content}</span>
                     <span class="history-timestamp">${date}</span>
                 </div>
+                <button class="remove-history" onclick="removeMemorizationHistoryItem(event, ${index})">x</button>
             </div>
         `;
     }).join('');

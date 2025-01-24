@@ -726,3 +726,16 @@ button:hover {
 .incorrect-answer {
     color: red;
 }
+
+/* ...existing code... */
+.remove-history {
+    background: transparent;
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+    margin-left: 0.5rem;
+}
+.remove-history:hover {
+    color: #ff4444;
+}
+/* ...existing code... */
