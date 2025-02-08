@@ -6,7 +6,8 @@ const ASSETS_TO_CACHE = [
   './quran.json',
   './manifest.json',
   './icons/icon-192x192.png',
-  './icons/icon-512x512.png'
+  './icons/icon-512x512.png',
+  '../src/pencil-left.png'
   // 
 ];
 
