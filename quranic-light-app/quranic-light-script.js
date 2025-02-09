@@ -768,6 +768,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const readQuranButton = document.getElementById('reading-mode');
     const historyButton = document.getElementById('history-mode');
     const memorizationHistoryButton = document.getElementById('memorization-history-btn');
+    const moodModeButton = document.getElementById('mood-mode');
     let isEditorMode = false;
 
     pencilButton.addEventListener('click', () => {
@@ -824,6 +825,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('toggle-memorization-history').addEventListener('click', (e) => {
         memorizationHistoryButton.classList.toggle('hidden');
+        e.target.classList.toggle('active');
+    });
+
+    document.getElementById('toggle-mood').addEventListener('click', (e) => {
+        moodModeButton.classList.toggle('hidden');
         e.target.classList.toggle('active');
     });
 
