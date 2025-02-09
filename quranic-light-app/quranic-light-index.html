@@ -83,6 +83,7 @@
                     <button id="reading-mode" class="mode-btn">Read Qur'an</button>
                     <button id="history-mode" class="mode-btn">History</button>
                     <button id="memorization-history-btn" class="mode-btn">Memorization Test History</button>
+                    <button id="mood-mode" class="mode-btn">Mood Mode</button>
                 </div>
 
                 <div id="multi-controls" class="hidden control-group">
@@ -152,6 +153,23 @@
                 <h2>Memorization Test History</h2>
                 <button id="clear-memorization-history" class="clear-history-btn">Clear Memorization History</button>
                 <div id="memorization-history-list"></div>
+            </div>
+
+            <div id="mood-display" class="card hidden">
+                <h2>Mood Based Ayahs</h2>
+                <div class="mood-selector">
+                    <button class="mood-btn" data-mood="happy">Happy</button>
+                    <button class="mood-btn" data-mood="sad">Sad</button>
+                    <button class="mood-btn" data-mood="anxious">Anxious</button>
+                    <button class="mood-btn" data-mood="grateful">Grateful</button>
+                    <button class="mood-btn" data-mood="hopeful">Hopeful</button>
+                </div>
+                <div id="mood-ayah-display" class="hidden">
+                    <p class="ayah-content">
+                        <span id="mood-ayah-number" class="ayah-number"></span>
+                        <span id="mood-ayah-text" class="arabic-text"></span>
+                    </p>
+                </div>
             </div>
         </main>
     </div>

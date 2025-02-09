@@ -30,6 +30,9 @@ const memorizationHistoryBtn = document.getElementById('memorization-history-btn
 const memorizationHistoryDisplay = document.getElementById('memorization-history-display');
 const memorizationHistoryList = document.getElementById('memorization-history-list');
 
+const moodModeBtn = document.getElementById('mood-mode');
+const moodDisplay = document.getElementById('mood-display');
+
 let quranData = null;
 let currentAyah = null;
 let followingAyahsList = [];
@@ -208,11 +211,13 @@ singleModeBtn.addEventListener('click', () => {
         readingModeBtn.classList.remove('active');
         historyModeBtn.classList.remove('active');
         memorizationHistoryBtn.classList.remove('active');
+        moodModeBtn.classList.remove('active');
         singleControls.classList.remove('hidden');
         multiControls.classList.add('hidden');
         readingDisplay.classList.add('hidden');
         historyDisplay.classList.add('hidden');
         memorizationHistoryDisplay.classList.add('hidden');
+        moodDisplay.classList.add('hidden');
         pickAyahButton.classList.remove('hidden');
     }
 });
@@ -229,11 +234,13 @@ multipleModeBtn.addEventListener('click', () => {
         readingModeBtn.classList.remove('active');
         historyModeBtn.classList.remove('active');
         memorizationHistoryBtn.classList.remove('active');
+        moodModeBtn.classList.remove('active');
         singleControls.classList.add('hidden');
         multiControls.classList.remove('hidden');
         readingDisplay.classList.add('hidden');
         historyDisplay.classList.add('hidden');
         memorizationHistoryDisplay.classList.add('hidden');
+        moodDisplay.classList.add('hidden');
         pickAyahButton.classList.remove('hidden');
     }
 });
@@ -249,6 +256,7 @@ readingModeBtn.addEventListener('click', () => {
         multipleModeBtn.classList.remove('active');
         historyModeBtn.classList.remove('active');
         memorizationHistoryBtn.classList.remove('active');
+        moodModeBtn.classList.remove('active');
         singleControls.classList.add('hidden');
         multiControls.classList.add('hidden');
         ayahDisplay.classList.add('hidden');
@@ -256,6 +264,7 @@ readingModeBtn.addEventListener('click', () => {
         readingDisplay.classList.remove('hidden');
         historyDisplay.classList.add('hidden');
         memorizationHistoryDisplay.classList.add('hidden');
+        moodDisplay.classList.add('hidden');
         pickAyahButton.classList.add('hidden');
     }
 });
@@ -271,6 +280,7 @@ historyModeBtn.addEventListener('click', () => {
         multipleModeBtn.classList.remove('active');
         readingModeBtn.classList.remove('active');
         memorizationHistoryBtn.classList.remove('active');
+        moodModeBtn.classList.remove('active');
         singleControls.classList.add('hidden');
         multiControls.classList.add('hidden');
         ayahDisplay.classList.add('hidden');
@@ -278,6 +288,7 @@ historyModeBtn.addEventListener('click', () => {
         readingDisplay.classList.add('hidden');
         historyDisplay.classList.remove('hidden');
         memorizationHistoryDisplay.classList.add('hidden');
+        moodDisplay.classList.add('hidden');
         pickAyahButton.classList.add('hidden');
         updateHistoryList();
     }
@@ -294,6 +305,7 @@ memorizationHistoryBtn.addEventListener('click', () => {
         multipleModeBtn.classList.remove('active');
         readingModeBtn.classList.remove('active');
         historyModeBtn.classList.remove('active');
+        moodModeBtn.classList.remove('active');
         singleControls.classList.add('hidden');
         multiControls.classList.add('hidden');
         ayahDisplay.classList.add('hidden');
@@ -301,8 +313,37 @@ memorizationHistoryBtn.addEventListener('click', () => {
         readingDisplay.classList.add('hidden');
         historyDisplay.classList.add('hidden');
         memorizationHistoryDisplay.classList.remove('hidden');
+        moodDisplay.classList.add('hidden');
         pickAyahButton.classList.add('hidden');
         updateMemorizationHistoryList();
+    }
+});
+
+moodModeBtn.addEventListener('click', () => {
+    const isActive = moodModeBtn.classList.contains('active');
+    if (isActive) {
+        moodModeBtn.classList.remove('active');
+        moodDisplay.classList.add('hidden');
+    } else {
+        // Deactivate other modes
+        singleModeBtn.classList.remove('active');
+        multipleModeBtn.classList.remove('active');
+        readingModeBtn.classList.remove('active');
+        historyModeBtn.classList.remove('active');
+        memorizationHistoryBtn.classList.remove('active');
+        
+        // Hide other displays
+        singleControls.classList.add('hidden');
+        multiControls.classList.add('hidden');
+        ayahDisplay.classList.add('hidden');
+        answerDisplay.classList.add('hidden');
+        readingDisplay.classList.add('hidden');
+        historyDisplay.classList.add('hidden');
+        memorizationHistoryDisplay.classList.add('hidden');
+        
+        // Activate mood mode
+        moodModeBtn.classList.add('active');
+        moodDisplay.classList.remove('hidden');
     }
 });
 
@@ -798,5 +839,64 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.toggleAbout = toggleAbout;
 });
+
+// Add mood-based ayah collections
+const moodAyahs = {
+    happy: [
+        { surah: 93, ayah: 5 }, // "And your Lord is going to give you, and you will be satisfied"
+        { surah: 94, ayah: 5 }, // "For indeed, with hardship [will be] ease"
+        { surah: 94, ayah: 6 }  // "Indeed, with hardship [will be] ease"
+    ],
+    sad: [
+        { surah: 2, ayah: 286 }, // "Allah does not charge a soul except [with that within] its capacity"
+        { surah: 94, ayah: 5 },  // "For indeed, with hardship [will be] ease"
+        { surah: 2, ayah: 153 }  // "O you who have believed, seek help through patience and prayer"
+    ],
+    anxious: [
+        { surah: 13, ayah: 28 }, // "Those who have believed and whose hearts are assured by the remembrance of Allah"
+        { surah: 2, ayah: 155 }, // "And We will surely test you with something of fear and hunger"
+        { surah: 3, ayah: 139 }  // "So do not weaken and do not grieve, and you will be superior"
+    ],
+    grateful: [
+        { surah: 14, ayah: 7 },  // "If you are grateful, I will surely increase you [in favor]"
+        { surah: 55, ayah: 13 }, // "So which of the favors of your Lord would you deny?"
+        { surah: 93, ayah: 11 }  // "And as for the favor of your Lord, report [it]"
+    ],
+    hopeful: [
+        { surah: 65, ayah: 7 },  // "Allah will bring about, after hardship, ease"
+        { surah: 2, ayah: 216 }, // "But perhaps you hate a thing and it is good for you"
+        { surah: 94, ayah: 5 }   // "For indeed, with hardship [will be] ease"
+    ]
+};
+
+// Add event listeners for mood buttons
+document.querySelectorAll('.mood-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        // Remove active class from all mood buttons
+        document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
+        
+        // Add active class to clicked button
+        btn.classList.add('active');
+        
+        // Get random ayah for selected mood
+        const mood = btn.dataset.mood;
+        const moodAyahsList = moodAyahs[mood];
+        const randomAyah = moodAyahsList[Math.floor(Math.random() * moodAyahsList.length)];
+        
+        // Display the ayah
+        const ayah = quranData[randomAyah.surah - 1].ayahs[randomAyah.ayah - 1];
+        displayMoodAyah(ayah, randomAyah.surah, randomAyah.ayah);
+    });
+});
+
+function displayMoodAyah(ayah, surahNumber, ayahNumber) {
+    const moodAyahDisplay = document.getElementById('mood-ayah-display');
+    const moodAyahNumberElement = document.getElementById('mood-ayah-number');
+    const moodAyahTextElement = document.getElementById('mood-ayah-text');
+
+    moodAyahNumberElement.textContent = `${surahNumber}:${ayahNumber}`;
+    moodAyahTextElement.textContent = ayah.text;
+    moodAyahDisplay.classList.remove('hidden');
+}
 
 fetchQuranData();
