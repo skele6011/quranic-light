@@ -30,6 +30,51 @@
                 <button id="toggle-read-quran" class="editor-btn">Toggle Read Qur'an</button>
                 <button id="toggle-history" class="editor-btn">Toggle History</button>
                 <button id="toggle-memorization-history" class="editor-btn">Toggle Memorization History</button>
+                
+                <div class="editor-icons-card card">
+                    <div class="editor-icons-container">
+                        <button class="editor-icon" title="About" onclick="toggleAbout()">?</button>
+                        <button class="editor-icon" title="Toggle Theme" onclick="toggleTheme()">☾</button>
+                        <button class="editor-icon" title="Delete">✖</button>
+                        <button class="editor-icon" title="Settings">⚙</button>
+                        <button class="editor-icon" title="Add">＋</button>
+                        <button class="editor-icon" title="Customize">☰</button>
+                    </div>
+                </div>
+
+                
+                <div class="notice-box">
+                    <h3>⚠️ Notice</h3>
+                    <ul>
+                         Some buttons in the editor mode are currently placeholders and may not function. But, all the toggleables work.<br>
+                        When light mode is turned on, the edit button (the pencil icon) will not be visible. To turn it off, you can either turn off light mode or refresh the page. But it'll still be functional if you press in the area where it should be. <br>
+                    </ul>
+                    
+                </div>
+
+                <!-- the about section -->
+                <div id="about-section" class="card hidden">
+                    <h2>About Quranic Light</h2>
+                    <div class="about-content">
+                        <p>Quranic Light is a comprehensive tool designed to help Muslims memorize and review their Qur'an.</p>
+                        <h3>Features:</h3>
+                        <ul>
+                            <li>Single Surah Mode: Practice memorization from a specific surah</li>
+                            <li>Advanced Mode: Test your memory across multiple surahs</li>
+                            <li>Read Quran: Read the complete Quran with bookmarking capability</li>
+                            <li>History: Track your reading and memorization progress</li>
+                            <li>Memorization Test History: Monitor your memorization performance</li>
+                        </ul>
+                        <h3>The idea & Me</h3>
+                        <ul>
+                            <li> I'm a student of Qur'an and computer science. I do not have much knowledge in either</li>
+                            <li> The idea came to me after starting my hifdh journey. I get tested by continuing from a random ayah from where I have memorized, and while being able to read what I have memorized from start to end is good, it's not as beneficial as being able to test yourself in this specific way</li>
+                            <li> The reason I decided to create this app is because it took me a long time to find something like it on the Good Play Store, and on my friends' iPhones, I couldn't find a single app that was able to do this. So I decided to make use of my knowledge of coding and create this simple app, despite it not being that good.</li>
+                        </ul>
+                        <p>This app might not be the best, not even close, but maybe I'll be better as time and practice goes on, in sha Allah. May Allah make this tool beneficial for your Quranic journey.</p>
+                    </div>
+                    <button class="btn-primary" onclick="toggleAbout()">Close</button>
+                </div>
             </div>
             <div class="card controls">
                 <div class="mode-selector">
@@ -122,6 +167,11 @@
                         console.log('ServiceWorker registration failed: ', err);
                     });
             });
+        }
+
+        function toggleAbout() {
+            const aboutSection = document.getElementById('about-section');
+            aboutSection.classList.toggle('hidden');
         }
     </script>
 </body>

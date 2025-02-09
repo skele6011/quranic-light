@@ -37,6 +37,8 @@ let bookmarks = JSON.parse(localStorage.getItem('quranBookmarks')) || [];
 let ayahBookmarks = JSON.parse(localStorage.getItem('quranAyahBookmarks')) || [];
 let readingHistory = JSON.parse(localStorage.getItem('quranReadingHistory')) || [];
 
+let isDarkMode = true;
+
 async function fetchQuranData() {
     try {
         const response = await fetch('quran.json');
@@ -679,6 +681,38 @@ bookmarkBtn.addEventListener('click', () => {
     bookmarksList.parentElement.classList.toggle('hidden');
 });
 
+function toggleAbout() {
+    const aboutSection = document.getElementById('about-section');
+    const isHidden = aboutSection.classList.contains('hidden');
+    
+    if (isHidden) {
+        // Create and add overlay
+        const overlay = document.createElement('div');
+        overlay.className = 'about-overlay';
+        overlay.onclick = toggleAbout;
+        document.body.appendChild(overlay);
+    } else {
+        // Remove overlay
+        const overlay = document.querySelector('.about-overlay');
+        if (overlay) {
+            overlay.remove();
+        }
+    }
+    
+    aboutSection.classList.toggle('hidden');
+}
+
+function toggleTheme() {
+    isDarkMode = !isDarkMode;
+    document.body.classList.toggle('light-mode');
+    
+    const themeButton = document.querySelector('[title="Toggle Theme"]');
+    themeButton.textContent = isDarkMode ? '☾' : '☀';
+    
+    // Save theme preference
+    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     updateBookmarksList();
     updateHistoryList();
@@ -699,6 +733,32 @@ document.addEventListener('DOMContentLoaded', () => {
         isEditorMode = !isEditorMode;
         document.body.classList.toggle('editor-mode', isEditorMode);
         editorControls.classList.toggle('hidden', !isEditorMode);
+
+        // Hide controls card when entering editor mode
+        const controlsCard = document.querySelector('.card.controls');
+        controlsCard.classList.toggle('hidden', isEditorMode);
+
+        // Close all tabs when entering editor mode - Might remove later
+        if (isEditorMode) {
+            
+            ayahDisplay.classList.add('hidden');
+            answerDisplay.classList.add('hidden');
+            readingDisplay.classList.add('hidden');
+            historyDisplay.classList.add('hidden');
+            memorizationHistoryDisplay.classList.add('hidden');
+            singleControls.classList.add('hidden');
+            multiControls.classList.add('hidden');
+
+            
+            singleSurahButton.classList.remove('active');
+            advancedModeButton.classList.remove('active');
+            readQuranButton.classList.remove('active');
+            historyButton.classList.remove('active');
+            memorizationHistoryButton.classList.remove('active');
+
+           
+            pickAyahButton.classList.add('hidden');
+        }
     });
 
     document.getElementById('toggle-single-surah').addEventListener('click', (e) => {
@@ -725,6 +785,18 @@ document.addEventListener('DOMContentLoaded', () => {
         memorizationHistoryButton.classList.toggle('hidden');
         e.target.classList.toggle('active');
     });
+
+    // Load saved theme preference
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    if (savedTheme === 'light') {
+        isDarkMode = true; // Will be toggled to false
+        toggleTheme();
+    }
+    
+    // Make toggleTheme available globally
+    window.toggleTheme = toggleTheme;
+
+    window.toggleAbout = toggleAbout;
 });
 
 fetchQuranData();
