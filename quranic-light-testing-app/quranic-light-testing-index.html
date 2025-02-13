@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qur'an Memorization Test</title>
+    <link rel="stylesheet" href="quranic-light-testing-style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2c3e50">
+    <link rel="apple-touch-icon" href="icons-testing/icon-192x192.png">
+</head>
+<body>
+    
+   
+    </a>
+    <div class="container">
+        <header>
+            <h1>Quranic Light</h1>
+            <button id="pencil-button" class="pencil-icon">
+                <img src="../src/pencil-left.png" alt="Pencil Icon">
+            </button>
+        </header>
+        <main>
+            <div id="editor-controls" class="hidden">
+                <button id="toggle-single-surah" class="editor-btn">Toggle Single Surah</button>
+                <button id="toggle-advanced-mode" class="editor-btn">Toggle Advanced Mode</button>
+                <button id="toggle-read-quran" class="editor-btn">Toggle Read Qur'an</button>
+                <button id="toggle-history" class="editor-btn">Toggle History</button>
+                <button id="toggle-memorization-history" class="editor-btn">Toggle Memorization History</button>
+                <button id="toggle-mood" class="editor-btn">Toggle Mood Mode</button>
+                
+                <div class="editor-icons-card card">
+                    <div class="editor-icons-container">
+                        <button class="editor-icon" title="About" onclick="toggleAbout()">?</button>
+                        <button class="editor-icon" title="Toggle Theme" onclick="toggleTheme()">☾</button>
+                        <button class="editor-icon" title="Delete">✖</button>
+                        <button class="editor-icon" title="Settings">⚙</button>
+                        <button class="editor-icon" title="Add">＋</button>
+                        <button class="editor-icon" title="Customize">☰</button>
+                    </div>
+                </div>
+
+                
+                <div class="notice-box">
+                    <h3>⚠️ Notice</h3>
+                    <ul>
+                         Some buttons in the editor mode are currently placeholders and may not function. But, all the toggleables work.<br>
+                        When light mode is turned on, the edit button (the pencil icon) will not be visible. To turn it off, you can either turn off light mode or refresh the page. But it'll still be functional if you press in the area where it should be. <br>
+                    </ul>
+                    
+                </div>
+
+                <!-- the about section -->
+                <div id="about-section" class="card hidden">
+                    <h2>About Quranic Light</h2>
+                    <div class="about-content">
+                        <p>Quranic Light is a comprehensive tool designed to help Muslims memorize and review their Qur'an.</p>
+                        <h3>Features:</h3>
+                        <ul>
+                            <li>Single Surah Mode: Practice memorization from a specific surah</li>
+                            <li>Advanced Mode: Test your memory across multiple surahs</li>
+                            <li>Read Quran: Read the complete Quran with bookmarking capability</li>
+                            <li>History: Track your reading and memorization progress</li>
+                            <li>Memorization Test History: Monitor your memorization performance</li>
+                        </ul>
+                        <h3>The idea & Me</h3>
+                        <ul>
+                            <li> I'm a student of Qur'an and computer science. I do not have much knowledge in either</li>
+                            <li> The idea came to me after starting my hifdh journey. I get tested by continuing from a random ayah from where I have memorized, and while being able to read what I have memorized from start to end is good, it's not as beneficial as being able to test yourself in this specific way</li>
+                            <li> The reason I decided to create this app is because it took me a long time to find something like it on the Good Play Store, and on my friends' iPhones, I couldn't find a single app that was able to do this. So I decided to make use of my knowledge of coding and create this simple app, despite it not being that good.</li>
+                        </ul>
+                        <p>This app might not be the best, not even close, but maybe I'll be better as time and practice goes on, in sha Allah. May Allah make this tool beneficial for your Quranic journey.</p>
+                    </div>
+                    <button class="btn-primary" onclick="toggleAbout()">Close</button>
+                </div>
+            </div>
+            <div class="card controls">
+                <div class="mode-selector">
+                    <button id="single-mode" class="mode-btn active">Single Surah</button>
+                    <button id="multiple-mode" class="mode-btn">Advanced Mode</button>
+                    <button id="reading-mode" class="mode-btn">Read Qur'an</button>
+                    <button id="history-mode" class="mode-btn">History</button>
+                    <button id="memorization-history-btn" class="mode-btn">Memorization Test History</button>
+                    <button id="mood-mode" class="mode-btn">Mood Mode</button>
+                </div>
+
+                <div id="multi-controls" class="hidden control-group">
+                    <div class="input-group">
+                        <label for="ayah-count">Number of Ayahs:</label>
+                        <input type="number" id="ayah-count" min="2" max="10" value="3" class="input-styled">
+                    </div>
+                    <div class="surah-range">
+                        <div class="input-group">
+                            <label for="surah-select-start">From Surah:</label>
+                            <select id="surah-select-start" class="select-styled"></select>
+                        </div>
+                        <div class="input-group">
+                            <label for="surah-select-end">To Surah:</label>
+                            <select id="surah-select-end" class="select-styled"></select>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="single-controls" class="control-group">
+                    <div class="input-group">
+                        <label for="surah-select">Select Surah:</label>
+                        <select id="surah-select" class="select-styled"></select>
+                    </div>
+                </div>
+
+                <button id="pick-ayah" class="btn-primary">Pick Ayah</button>
+            </div>
+
+            <div id="ayah-display" class="card hidden">
+                <h2>Selected Ayah</h2>
+                <p class="ayah-content">
+                    <span id="ayah-number" class="ayah-number"> <br> </span> 
+                    <span id="ayah-text" class="arabic-text"> <br> </span> 
+                </p>
+                <button id="check-answer" class="btn-primary">Check Answer</button>
+            </div>
+
+            <div id="answer-display" class="card hidden">
+                <h2>Following Ayahs</h2>
+                <ol id="following-ayahs" class="arabic-text"></ol>
+            </div>
+
+            <div id="reading-display" class="card hidden">
+                <div class="reading-controls">
+                    <select id="reading-surah-select" class="select-styled"></select>
+                    <button id="bookmark-btn" class="bookmark-btn" title="View Bookmarks">
+                        <span class="bookmark-icon">☆</span>
+                    </button>
+                </div>
+                <div class="bookmarks-panel hidden">
+                    <h3>Bookmarks</h3>
+                    <div id="bookmarks-list"></div>
+                </div>
+                <div class="surah-content">
+                    <h2 id="surah-title" class="arabic-text"></h2>
+                    <div id="surah-text" class="arabic-text"></div>
+                </div>
+            </div>
+
+            <div id="history-display" class="card hidden">
+                <h2>Reading History</h2>
+                <div id="history-list"></div>
+            </div>
+
+            <div id="memorization-history-display" class="card hidden">
+                <h2>Memorization Test History</h2>
+                <button id="clear-memorization-history" class="clear-history-btn">Clear Memorization History</button>
+                <div id="memorization-history-list"></div>
+            </div>
+
+            <div id="mood-display" class="card hidden">
+                <h2>Mood Based Ayahs</h2>
+                <div class="mood-selector">
+                    <button class="mood-btn" data-mood="happy">Happy</button>
+                    <button class="mood-btn" data-mood="sad">Sad</button>
+                    <button class="mood-btn" data-mood="anxious">Anxious</button>
+                    <button class="mood-btn" data-mood="grateful">Grateful</button>
+                    <button class="mood-btn" data-mood="hopeful">Hopeful</button>
+                </div>
+                <div id="mood-ayah-display" class="hidden">
+                    <p class="ayah-content">
+                        <span id="mood-ayah-number" class="ayah-number"></span>
+                        <span id="mood-ayah-text" class="arabic-text"></span>
+                    </p>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="quranic-light-testing-script.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful');
+                    })
+                    .catch(err => {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            });
+        }
+
+        function toggleAbout() {
+            const aboutSection = document.getElementById('about-section');
+            aboutSection.classList.toggle('hidden');
+        }
+    </script>
+</body>
+</html>

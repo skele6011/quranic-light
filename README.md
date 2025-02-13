@@ -4,6 +4,7 @@
 ## Updates:
 #### Latest Updates
 - Added mood mode with ayah in them. Moods include [happy, sad, anxious, grateful, hopeful]
+- Fixed issue with mood option not being untoggled
 - Added extra buttons in place holders. Those include:
 - About app
 - Night & Dark mode toggles
