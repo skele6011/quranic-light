@@ -33,6 +33,15 @@ const memorizationHistoryList = document.getElementById('memorization-history-li
 const moodModeBtn = document.getElementById('mood-mode');
 const moodDisplay = document.getElementById('mood-display');
 
+const listeningModeBtn = document.getElementById('listening-mode');
+const listeningDisplay = document.getElementById('listening-display');
+const reciterSelect = document.getElementById('reciter-select');
+const listeningsurahSelect = document.getElementById('listening-surah-select');
+const ayahSelect = document.getElementById('ayah-select');
+const quranAudio = document.getElementById('quran-audio');
+const prevAyahBtn = document.getElementById('prev-ayah');
+const nextAyahBtn = document.getElementById('next-ayah');
+
 let quranData = null;
 let currentAyah = null;
 let followingAyahsList = [];
@@ -41,6 +50,8 @@ let ayahBookmarks = JSON.parse(localStorage.getItem('quranAyahBookmarks')) || []
 let readingHistory = JSON.parse(localStorage.getItem('quranReadingHistory')) || [];
 
 let isDarkMode = true;
+let currentReciter = null;
+let currentAudioAyah = null;
 
 async function fetchQuranData() {
     try {
@@ -185,7 +196,7 @@ function populateSurahSelects() {
         "An-Nas (الناس)"
     ];
 
-    const selectElements = [surahSelect, surahSelectStart, surahSelectEnd, readingSurahSelect];
+    const selectElements = [surahSelect, surahSelectStart, surahSelectEnd, readingSurahSelect, listeningsurahSelect];
     selectElements.forEach(select => {
         for (let i = 0; i < surahNames.length; i++) {
             const option = document.createElement('option');
@@ -212,12 +223,14 @@ singleModeBtn.addEventListener('click', () => {
         historyModeBtn.classList.remove('active');
         memorizationHistoryBtn.classList.remove('active');
         moodModeBtn.classList.remove('active');
+        listeningModeBtn.classList.remove('active');
         singleControls.classList.remove('hidden');
         multiControls.classList.add('hidden');
         readingDisplay.classList.add('hidden');
         historyDisplay.classList.add('hidden');
         memorizationHistoryDisplay.classList.add('hidden');
         moodDisplay.classList.add('hidden');
+        listeningDisplay.classList.add('hidden');
         pickAyahButton.classList.remove('hidden');
     }
 });
@@ -235,12 +248,14 @@ multipleModeBtn.addEventListener('click', () => {
         historyModeBtn.classList.remove('active');
         memorizationHistoryBtn.classList.remove('active');
         moodModeBtn.classList.remove('active');
+        listeningModeBtn.classList.remove('active');
         singleControls.classList.add('hidden');
         multiControls.classList.remove('hidden');
         readingDisplay.classList.add('hidden');
         historyDisplay.classList.add('hidden');
         memorizationHistoryDisplay.classList.add('hidden');
         moodDisplay.classList.add('hidden');
+        listeningDisplay.classList.add('hidden');
         pickAyahButton.classList.remove('hidden');
     }
 });
@@ -257,6 +272,7 @@ readingModeBtn.addEventListener('click', () => {
         historyModeBtn.classList.remove('active');
         memorizationHistoryBtn.classList.remove('active');
         moodModeBtn.classList.remove('active');
+        listeningModeBtn.classList.remove('active');
         singleControls.classList.add('hidden');
         multiControls.classList.add('hidden');
         ayahDisplay.classList.add('hidden');
@@ -265,6 +281,7 @@ readingModeBtn.addEventListener('click', () => {
         historyDisplay.classList.add('hidden');
         memorizationHistoryDisplay.classList.add('hidden');
         moodDisplay.classList.add('hidden');
+        listeningDisplay.classList.add('hidden');
         pickAyahButton.classList.add('hidden');
     }
 });
@@ -281,6 +298,7 @@ historyModeBtn.addEventListener('click', () => {
         readingModeBtn.classList.remove('active');
         memorizationHistoryBtn.classList.remove('active');
         moodModeBtn.classList.remove('active');
+        listeningModeBtn.classList.remove('active');
         singleControls.classList.add('hidden');
         multiControls.classList.add('hidden');
         ayahDisplay.classList.add('hidden');
@@ -289,6 +307,7 @@ historyModeBtn.addEventListener('click', () => {
         historyDisplay.classList.remove('hidden');
         memorizationHistoryDisplay.classList.add('hidden');
         moodDisplay.classList.add('hidden');
+        listeningDisplay.classList.add('hidden');
         pickAyahButton.classList.add('hidden');
         updateHistoryList();
     }
@@ -306,6 +325,7 @@ memorizationHistoryBtn.addEventListener('click', () => {
         readingModeBtn.classList.remove('active');
         historyModeBtn.classList.remove('active');
         moodModeBtn.classList.remove('active');
+        listeningModeBtn.classList.remove('active');
         singleControls.classList.add('hidden');
         multiControls.classList.add('hidden');
         ayahDisplay.classList.add('hidden');
@@ -314,6 +334,7 @@ memorizationHistoryBtn.addEventListener('click', () => {
         historyDisplay.classList.add('hidden');
         memorizationHistoryDisplay.classList.remove('hidden');
         moodDisplay.classList.add('hidden');
+        listeningDisplay.classList.add('hidden');
         pickAyahButton.classList.add('hidden');
         updateMemorizationHistoryList();
     }
@@ -325,14 +346,13 @@ moodModeBtn.addEventListener('click', () => {
         moodModeBtn.classList.remove('active');
         moodDisplay.classList.add('hidden');
     } else {
-        // Deactivate other modes
         singleModeBtn.classList.remove('active');
         multipleModeBtn.classList.remove('active');
         readingModeBtn.classList.remove('active');
         historyModeBtn.classList.remove('active');
         memorizationHistoryBtn.classList.remove('active');
+        listeningModeBtn.classList.remove('active');
         
-        // Hide other displays
         singleControls.classList.add('hidden');
         multiControls.classList.add('hidden');
         ayahDisplay.classList.add('hidden');
@@ -341,9 +361,34 @@ moodModeBtn.addEventListener('click', () => {
         historyDisplay.classList.add('hidden');
         memorizationHistoryDisplay.classList.add('hidden');
         
-        // Activate mood mode
         moodModeBtn.classList.add('active');
         moodDisplay.classList.remove('hidden');
+        listeningDisplay.classList.add('hidden');
+    }
+});
+
+listeningModeBtn.addEventListener('click', async () => {
+    const isActive = listeningModeBtn.classList.contains('active');
+    if (isActive) {
+        listeningModeBtn.classList.remove('active');
+        listeningDisplay.classList.add('hidden');
+        quranAudio.pause();
+    } else {
+        // Hide all other displays and deactivate other modes
+        const displays = [singleControls, multiControls, readingDisplay, historyDisplay, 
+                         memorizationHistoryDisplay, moodDisplay, ayahDisplay, answerDisplay];
+        displays.forEach(display => display.classList.add('hidden'));
+        
+        document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+        
+        listeningModeBtn.classList.add('active');
+        listeningDisplay.classList.remove('hidden');
+        
+        // Initialize reciters if not already done
+        if (!reciterSelect.children.length) {
+            const reciters = await fetchReciters();
+            populateReciters(reciters);
+        }
     }
 });
 
@@ -727,13 +772,11 @@ function toggleAbout() {
     const isHidden = aboutSection.classList.contains('hidden');
     
     if (isHidden) {
-        // Create and add overlay
         const overlay = document.createElement('div');
         overlay.className = 'about-overlay';
         overlay.onclick = toggleAbout;
         document.body.appendChild(overlay);
     } else {
-        // Remove overlay
         const overlay = document.querySelector('.about-overlay');
         if (overlay) {
             overlay.remove();
@@ -750,7 +793,6 @@ function toggleTheme() {
     const themeButton = document.querySelector('[title="Toggle Theme"]');
     themeButton.textContent = isDarkMode ? '☾' : '☀';
     
-    // Save theme preference
     localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
 }
 
@@ -776,11 +818,9 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.classList.toggle('editor-mode', isEditorMode);
         editorControls.classList.toggle('hidden', !isEditorMode);
 
-        // Hide controls card when entering editor mode
         const controlsCard = document.querySelector('.card.controls');
         controlsCard.classList.toggle('hidden', isEditorMode);
 
-        // Close all tabs when entering editor mode - Might remove later
         if (isEditorMode) {
             
             ayahDisplay.classList.add('hidden');
@@ -833,20 +873,35 @@ document.addEventListener('DOMContentLoaded', () => {
         e.target.classList.toggle('active');
     });
 
-    // Load saved theme preference
+    const listeningButton = document.getElementById('listening-mode');
+
+    document.getElementById('toggle-listening').addEventListener('click', (e) => {
+        listeningButton.classList.toggle('hidden');
+        e.target.classList.toggle('active');
+    });
+
+    const toggleListeningBtn = document.getElementById('toggle-listening');
+    toggleListeningBtn.addEventListener('click', () => {
+        if (listeningModeBtn.classList.contains('hidden')) {
+            listeningModeBtn.classList.remove('hidden');
+            toggleListeningBtn.classList.add('active');
+        } else {
+            listeningModeBtn.classList.add('hidden');
+            toggleListeningBtn.classList.remove('active');
+        }
+    });
+
     const savedTheme = localStorage.getItem('theme') || 'dark';
     if (savedTheme === 'light') {
-        isDarkMode = true; // Will be toggled to false
+        isDarkMode = true; 
         toggleTheme();
     }
     
-    // Make toggleTheme available globally
     window.toggleTheme = toggleTheme;
 
     window.toggleAbout = toggleAbout;
 });
 
-// Add mood-based ayah collections
 const moodAyahs = {
     happy: [
         { surah: 93, ayah: 5 }, // "And your Lord is going to give you, and you will be satisfied"
@@ -875,21 +930,17 @@ const moodAyahs = {
     ]
 };
 
-// Add event listeners for mood buttons
+
 document.querySelectorAll('.mood-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-        // Remove active class from all mood buttons
         document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
         
-        // Add active class to clicked button
         btn.classList.add('active');
         
-        // Get random ayah for selected mood
         const mood = btn.dataset.mood;
         const moodAyahsList = moodAyahs[mood];
         const randomAyah = moodAyahsList[Math.floor(Math.random() * moodAyahsList.length)];
         
-        // Display the ayah
         const ayah = quranData[randomAyah.surah - 1].ayahs[randomAyah.ayah - 1];
         displayMoodAyah(ayah, randomAyah.surah, randomAyah.ayah);
     });
@@ -904,5 +955,113 @@ function displayMoodAyah(ayah, surahNumber, ayahNumber) {
     moodAyahTextElement.textContent = ayah.text;
     moodAyahDisplay.classList.remove('hidden');
 }
+
+async function fetchReciters() {
+    try {
+        // Using static list of popular reciters from mp3quran.net
+        const reciters = [
+            { id: "mishari_rashid_alafasy", reciter_name: "Mishary Rashid Alafasy" },
+            { id: "abdul_basit_murattal", reciter_name: "Abdul Basit Abdul Samad" },
+            { id: "abu_bakr_ash_shaatree", reciter_name: "Abu Bakr Al Shatri" },
+            { id: "maher_al_muaiqly", reciter_name: "Maher Al Muaiqly" },
+            { id: "mohammad_al_tablaway", reciter_name: "Mohammad al Tablaway" },
+            { id: "saud_al_shuraim", reciter_name: "Saud Al-Shuraim" },
+        ];
+        return reciters;
+    } catch (error) {
+        console.error('Error with reciters:', error);
+        return [];
+    }
+}
+
+function populateReciters(reciters) {
+    // Add a default option
+    const defaultOption = '<option value="">Select a reciter</option>';
+    const reciterOptions = reciters.map(reciter => 
+        `<option value="${reciter.id}">${reciter.reciter_name}</option>`
+    ).join('');
+    
+    reciterSelect.innerHTML = defaultOption + reciterOptions;
+    // Don't set a default reciter - let user choose
+    currentReciter = null;
+}
+
+async function loadAudioForAyah(surahNumber, ayahNumber) {
+    try {
+        if (!currentReciter) return;
+        
+        // Format numbers to have leading zeros
+        const formattedSurah = String(surahNumber).padStart(3, '0');
+        const formattedAyah = String(ayahNumber).padStart(3, '0');
+        
+        // Using mp3quran.net API
+        const audioUrl = `https://server8.mp3quran.net/${currentReciter}/${formattedSurah}${formattedAyah}.mp3`;
+        
+        quranAudio.src = audioUrl;
+        quranAudio.load();
+        
+        currentAudioAyah = { surah: surahNumber, ayah: ayahNumber };
+        
+        try {
+            await quranAudio.play();
+        } catch (playError) {
+            if (playError.name !== 'AbortError') {
+                console.error('Playback failed:', playError);
+            }
+        }
+    } catch (error) {
+        console.error('Error loading audio:', error);
+    }
+}
+
+function updateAyahSelect(surahNumber) {
+    const surah = quranData[surahNumber - 1];
+    ayahSelect.innerHTML = surah.ayahs.map((_, index) =>
+        `<option value="${index + 1}">Ayah ${index + 1}</option>`
+    ).join('');
+}
+
+reciterSelect.addEventListener('change', (e) => {
+    currentReciter = e.target.value;
+    if (currentAudioAyah) {
+        loadAudioForAyah(currentAudioAyah.surah, currentAudioAyah.ayah);
+    }
+});
+
+listeningsurahSelect.addEventListener('change', (e) => {
+    const surahNumber = parseInt(e.target.value);
+    updateAyahSelect(surahNumber);
+});
+
+ayahSelect.addEventListener('change', (e) => {
+    const surahNumber = parseInt(listeningsurahSelect.value);
+    const ayahNumber = parseInt(e.target.value);
+    loadAudioForAyah(surahNumber, ayahNumber);
+});
+
+prevAyahBtn.addEventListener('click', () => {
+    if (currentAudioAyah) {
+        const prevAyah = currentAudioAyah.ayah - 1;
+        if (prevAyah > 0) {
+            ayahSelect.value = prevAyah;
+            loadAudioForAyah(currentAudioAyah.surah, prevAyah);
+        }
+    }
+});
+
+nextAyahBtn.addEventListener('click', () => {
+    if (currentAudioAyah) {
+        const surah = quranData[currentAudioAyah.surah - 1];
+        const nextAyah = currentAudioAyah.ayah + 1;
+        if (nextAyah <= surah.ayahs.length) {
+            ayahSelect.value = nextAyah;
+            loadAudioForAyah(currentAudioAyah.surah, nextAyah);
+        }
+    }
+});
+
+quranAudio.addEventListener('ended', () => {
+    nextAyahBtn.click();
+});
 
 fetchQuranData();

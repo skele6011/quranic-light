@@ -8,12 +8,11 @@
     --border-radius: 8px;
     --spacing: 1rem;
 
-    /* Add light mode variables */
     --light-primary-color: #34495e;
     --light-secondary-color: #2c3e50;
     --light-accent-color: #2980b9;
     --light-background-color: #ffffff;
-    --light-card-background: rgba(0, 0, 0, 0.05);
+    --light-card-background: rgba(16, 14, 14, 0.05);
     --light-text-color: #000000;
 }
 
@@ -1070,5 +1069,50 @@ button:hover {
 .light-mode .mood-btn.active {
     background-color: var(--light-accent-color);
     color: white;
+}
+
+.mode-selector {
+    display: grid;
+    grid-template-rows: auto auto;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+@media screen and (min-width: 769px) {
+    .mode-selector {
+        grid-template-areas: 
+            "main main main main main"
+            "secondary secondary . . .";
+    }
+
+    .mode-btn {
+        padding: 0.75rem 1.5rem;
+    }
+
+    .mode-btn[id^="single-mode"],
+    .mode-btn[id^="multiple-mode"],
+    .mode-btn[id^="reading-mode"],
+    .mode-btn[id^="history-mode"],
+    .mode-btn[id^="memorization-history-btn"] {
+        grid-row: 1;
+    }
+
+    .mode-btn[id^="mood-mode"],
+    .mode-btn[id^="listening-mode"] {
+        grid-row: 2;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .mode-selector {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .mode-btn {
+        width: 100%;
+        padding: 1rem;
+    }
 }
 

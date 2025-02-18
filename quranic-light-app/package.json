@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@quranjs/api": "^1.7.3"
+  }
+}

@@ -31,6 +31,7 @@
                 <button id="toggle-history" class="editor-btn">Toggle History</button>
                 <button id="toggle-memorization-history" class="editor-btn">Toggle Memorization History</button>
                 <button id="toggle-mood" class="editor-btn">Toggle Mood Mode</button>
+                <button id="toggle-listening" class="editor-btn">Toggle Listen Mode</button>
                 
                 <div class="editor-icons-card card">
                     <div class="editor-icons-container">
@@ -84,7 +85,8 @@
                     <button id="reading-mode" class="mode-btn">Read Qur'an</button>
                     <button id="history-mode" class="mode-btn">History</button>
                     <button id="memorization-history-btn" class="mode-btn">Memorization Test History</button>
-                    <button id="mood-mode" class="mode-btn">Mood Mode</button>
+                    <button id="mood-mode" class="mode-btn">Mood</button>
+                    <button id="listening-mode" class="mode-btn">Listen</button>
                 </div>
 
                 <div id="multi-controls" class="hidden control-group">
@@ -170,6 +172,35 @@
                         <span id="mood-ayah-number" class="ayah-number"></span>
                         <span id="mood-ayah-text" class="arabic-text"></span>
                     </p>
+                </div>
+            </div>
+
+            <div id="listening-display" class="card hidden">
+                <h2>Listen to Qur'an</h2>
+                <div class="listening-controls">
+                    <div class="input-group">
+                        <label for="reciter-select">Select Reciter:</label>
+                        <select id="reciter-select" class="select-styled"></select>
+                    </div>
+                    <div class="input-group">
+                        <label for="listening-surah-select">Select Surah:</label>
+                        <select id="listening-surah-select" class="select-styled"></select>
+                    </div>
+                    <div class="input-group">
+                        <label for="ayah-select">Select Ayah:</label>
+                        <select id="ayah-select" class="select-styled"></select>
+                    </div>
+                </div>
+                <div class="audio-player">
+                    <audio id="quran-audio" controls></audio>
+                    <div class="audio-controls">
+                        <button id="prev-ayah" class="btn-primary">Previous</button>
+                        <button id="next-ayah" class="btn-primary">Next</button>
+                    </div>
+                </div>
+                <div class="notice-box">
+                    <h3>⚠️ Notice</h3>
+                    <p>The Listen mode is currently not functioning. Please do not attempt to fix or debug this feature as it is under development.</p>
                 </div>
             </div>
         </main>
